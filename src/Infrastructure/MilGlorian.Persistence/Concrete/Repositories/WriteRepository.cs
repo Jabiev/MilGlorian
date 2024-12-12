@@ -20,18 +20,13 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 
     public async Task AddRangeAsync(List<T> entities) => await Table.AddRangeAsync(entities);
 
-    public async Task<bool> AddAsync(T entity)
+    public async Task<T> AddAsync(T entity)
     {
-        EntityEntry entry = await Table.AddAsync(entity);
-        return entry.State == EntityState.Added;
+        await Table.AddAsync(entity);
+        return entity;
     }
 
-    public async Task<bool> Remove(Guid id)
-    {
-        T entity = await Table.FirstOrDefaultAsync(data => data.Id == id);
-        var entry = _milGlorianDbContext.Remove(entity);
-        return entry.State == EntityState.Deleted;
-    }
+    public void Remove(T entity) => _milGlorianDbContext.Remove(entity);
 
     public bool Update(T entity)
     {

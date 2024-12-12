@@ -2,9 +2,9 @@
 
 public interface IWriteRepository<T> : IRepository<T> where T : class
 {
-    Task<bool> AddAsync(T entity);
+    Task<T> AddAsync(T entity);
     Task AddRangeAsync(List<T> entities);
     bool Update(T entity);
-    Task<bool> Remove(Guid id);
+    void Remove(T entity);
     Task<int> SaveChangesAsync();
 }
