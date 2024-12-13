@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilGlorian.API", "src\Prese
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilGlorian.Infrastructure", "src\Infrastructure\MilGlorian.Infrastructure\MilGlorian.Infrastructure.csproj", "{28E88ED8-9CEE-49D8-81AF-E708DFBACC56}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C585E7A5-7866-4F1E-A719-E21DB72B418F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilGlorian.Common", "src\Common\MilGlorian.Common\MilGlorian.Common.csproj", "{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{28E88ED8-9CEE-49D8-81AF-E708DFBACC56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28E88ED8-9CEE-49D8-81AF-E708DFBACC56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28E88ED8-9CEE-49D8-81AF-E708DFBACC56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +70,7 @@ Global
 		{A9E78AE9-BCEF-4418-9E21-FBBED6072A01} = {760F4BE1-68E6-4694-83B5-2345DADDBC8C}
 		{6E92D356-721E-4B81-AA39-CEA720954F79} = {DEE2E971-96ED-4477-B555-C26F94F88A73}
 		{28E88ED8-9CEE-49D8-81AF-E708DFBACC56} = {760F4BE1-68E6-4694-83B5-2345DADDBC8C}
+		{DB6245BB-C188-4F5D-A7E5-CA9C5EFB6810} = {C585E7A5-7866-4F1E-A719-E21DB72B418F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A61B1E8A-B40F-4CBA-AC89-12BF9A944DFC}

@@ -9,6 +9,7 @@ using MilGlorian.Application.Abstract.Repositories.Departments;
 using MilGlorian.Application.Abstract.Repositories.Industries;
 using MilGlorian.Application.Abstract.Repositories.Vacancies;
 using MilGlorian.Application.Abstract.Repositories.VacancyDetails;
+using MilGlorian.Application.Abstract.Services;
 using MilGlorian.Persistence.Concrete.Repositories.Biographies;
 using MilGlorian.Persistence.Concrete.Repositories.Branches;
 using MilGlorian.Persistence.Concrete.Repositories.Categories;
@@ -19,6 +20,7 @@ using MilGlorian.Persistence.Concrete.Repositories.Departments;
 using MilGlorian.Persistence.Concrete.Repositories.Industries;
 using MilGlorian.Persistence.Concrete.Repositories.Vacancies;
 using MilGlorian.Persistence.Concrete.Repositories.VacancyDetails;
+using MilGlorian.Persistence.Concrete.Services;
 
 namespace MilGlorian.Persistence;
 
@@ -45,6 +47,8 @@ public static class HostingExtensions
         services.AddScoped<IVacancyReadRepository,VacancyReadRepository>();
         services.AddScoped<IVacancyWriteRepository,VacancyWriteRepository>();
         services.AddScoped<IVacancyDetailReadRepository,VacancyDetailReadRepository>();
-        services.AddScoped<IVacancyDetailWriteRepository,VacancyDetailWriteRepository>();
+        services.AddScoped<IVacancyDetailWriteRepository, VacancyDetailWriteRepository>();
+
+        services.AddScoped<ICityService,CityService>();
     }
 }

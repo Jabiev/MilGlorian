@@ -8,10 +8,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.ConfigurePersistenceServices();
+builder.Services.ConfigurePersistenceServices();
 builder.Services.AddDbContext<MilGlorianDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgreSQL"]);
+});
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSwaggerDocument(configure =>
+{
+    configure.PostProcess = (doc =>
+    {
+        doc.Info.Title = "Mil Glorian Jobs";
+        doc.Info.Version = "1.0";
+        doc.Info.Description = "All Jobs in Azerbaijan";
+        doc.Info.Contact = new NSwag.OpenApiContact()
+        {
+            Name = "MIL GLORIAN",
+            Url = "https://www.youtube.com/@iamjabiev",
+            Email = "jabieviam@gmail.com",
+        };
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -25,6 +41,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/", handler =>
+{
+    handler.Response.Redirect("/swagger/index.html", permanent: false);
+    return Task.CompletedTask;
+});
 
 app.UseAuthorization();
 
