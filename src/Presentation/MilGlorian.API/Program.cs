@@ -17,7 +17,7 @@ builder.Services.AddDbContext<MilGlorianDbContext>(options =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddOptionsWithValidateOnStart<Program>();
+//builder.Services.AddOptionsWithValidateOnStart<Program>();//ensure
 builder.Services.AddSwaggerDocument(configure =>
 {
     configure.PostProcess = (doc =>
