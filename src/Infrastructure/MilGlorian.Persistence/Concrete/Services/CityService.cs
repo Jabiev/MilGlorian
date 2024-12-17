@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MilGlorian.Application.Abstract.Repositories.Cities;
 using MilGlorian.Application.Abstract.Services;
@@ -6,6 +7,7 @@ using MilGlorian.Application.DTOs.City;
 using MilGlorian.Common.Shared;
 using MilGlorian.Domain.Entities;
 using MilGlorian.Persistence.Exceptions;
+using System.Net;
 
 namespace MilGlorian.Persistence.Concrete.Services;
 
@@ -24,35 +26,61 @@ public class CityService : ICityService
         _mapper = mapper;
     }
 
-    public async Task<GetCityDTO> CreateAsync(AddCityDTO createCityDTO)
+    public async Task<APIResponse<GetCityDTO>> CreateAsync(AddCityDTO createCityDTO)
     {
+        var response = new APIResponse<GetCityDTO>();
+
         if (createCityDTO is null)
-            throw new ArgumentNullException("the entity mustn't be null");
+        {
+            response.Message = "the entity mustn't be null";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
         if ((await _readRepository.Where(c => c.Name == createCityDTO.Name).FirstOrDefaultAsync()) is not null)
-            throw new Exception("Already Exists");
+        {
+            response.Message = "Already Exists";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         var city = _mapper.Map<City>(createCityDTO);
         await _writeRepository.AddAsync(city);
         await _writeRepository.SaveChangesAsync();
 
-        return _mapper.Map<GetCityDTO>(city);
+        response.Payload = _mapper.Map<GetCityDTO>(city);
+        response.ResponseCode = HttpStatusCode.OK;
+        return response;
     }
 
-    public async Task Delete(Guid id)
+    public async Task<APIResponse<EmptyResult>> Delete(Guid id)
     {
+        var response = new APIResponse<EmptyResult>();
+
         var entity = await _readRepository.GetByIdAsync(id);
         if (entity is null || entity.isDeleted)
-            throw new NotFoundException("the entity can't find");
+        {
+            response.Message = "The entity can't find";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         //depending branches or vacancies
         entity.isDeleted = true;
         await _writeRepository.SaveChangesAsync();
+        response.ResponseCode = HttpStatusCode.OK;
+        return response;
     }
 
-    public async Task<Pagination<GetCityDTO>> GetAllAsync(int pageNumber = 1, int take = 10, bool isPaginated = false)
+    public async Task<APIResponse<Pagination<GetCityDTO>>> GetAllAsync(int pageNumber = 1, int take = 10, bool isPaginated = false)
     {
+        var response = new APIResponse<Pagination<GetCityDTO>>();
+
         if (pageNumber < 1 || take < 1)
-            throw new ArgumentException("Page number and page size must be greater than zero");
+        {
+            response.Message = "Page number and page size must be greater than zero";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         var query = _readRepository.GetAll(c => !c.isDeleted);
 
@@ -65,7 +93,7 @@ public class CityService : ICityService
 
         var mappedItems = _mapper.Map<List<GetCityDTO>>(query).ToList();
 
-        var response = new Pagination<GetCityDTO>()
+        response.Payload = new Pagination<GetCityDTO>()
         {
             Items = mappedItems,
             PageIndex = pageNumber,
@@ -73,24 +101,44 @@ public class CityService : ICityService
             TotalPage = (int)Math.Ceiling((double)totalCount / take),
             PageSize = isPaginated ? take : totalCount
         };
+        response.ResponseCode = HttpStatusCode.OK;
         return response;
     }
 
-    public async Task<GetCityDTO> GetByIdAsync(Guid id)
+    public async Task<APIResponse<GetCityDTO>> GetByIdAsync(Guid id)
     {
+        var response = new APIResponse<GetCityDTO>();
+
         var entity = await _readRepository.GetByIdAsync(id);
         if (entity is null || entity.isDeleted)
-            throw new NotFoundException("The entity can't find");
-        return _mapper.Map<GetCityDTO>(entity);
+        {
+            response.Message = "The entity can't find";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
+
+        response.Payload = _mapper.Map<GetCityDTO>(entity);
+        response.ResponseCode = HttpStatusCode.OK;
+        return response;
     }
 
-    public async Task<Pagination<GetCityDTO>> SearchAsync(string name, int pageNumber = 1, int take = 10, bool isPaginated = false)
+    public async Task<APIResponse<Pagination<GetCityDTO>>> SearchAsync(string name, int pageNumber = 1, int take = 10, bool isPaginated = false)
     {
+        var response = new APIResponse<Pagination<GetCityDTO>>();
+
         if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("Search term cannot be null or empty");
+        {
+            response.Message = "Search term cannot be null or empty";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         if (pageNumber < 1 || take < 1)
-            throw new ArgumentException("Page number and page size must be greater than zero.");
+        {
+            response.Message = "Page number and page size must be greater than zero.";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         var query = _readRepository.Where(city => city.Name.ToLower().Contains(name.ToLower()) && !city.isDeleted);
 
@@ -103,7 +151,7 @@ public class CityService : ICityService
 
         var mappedItems = _mapper.Map<List<GetCityDTO>>(query).ToList();
 
-        var response = new Pagination<GetCityDTO>()
+        response.Payload = new Pagination<GetCityDTO>()
         {
             Items = mappedItems,
             PageIndex = pageNumber,
@@ -111,22 +159,35 @@ public class CityService : ICityService
             TotalPage = (int)Math.Ceiling((double)totalCount / take),
             PageSize = isPaginated ? take : totalCount
         };
-
+        response.ResponseCode = HttpStatusCode.OK;
         return response;
     }
 
-    public async Task<UpdateCityDTO> Update(Guid id, UpdateCityDTO updateCityDTO)
+    public async Task<APIResponse<UpdateCityDTO>> Update(Guid id, UpdateCityDTO updateCityDTO)
     {
+        var response = new APIResponse<UpdateCityDTO>();
+
         if (id != updateCityDTO.Id)
-            throw new Exception("Id must be similar the id which came from root");
+        {
+            response.Message = "Id must be similar the id which came from root";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         var entity = await _readRepository.GetByIdAsync(id);
         if (entity is null || entity.isDeleted)
-            throw new NotFoundException("the entity can't find");
+        {
+            response.Message = "The entity can't find";
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            return response;
+        }
 
         entity.Name = updateCityDTO.Name;
         await _writeRepository.SaveChangesAsync();
+        
+        response.Payload = _mapper.Map<UpdateCityDTO>(entity);
+        response.ResponseCode = HttpStatusCode.OK;
 
-        return _mapper.Map<UpdateCityDTO>(entity);
+        return response;
     }
 }

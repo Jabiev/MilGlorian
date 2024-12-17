@@ -19,43 +19,43 @@ public class CitiesController : ControllerBase
 
     // GET: api/Cities
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetCityDTO>>> GetCities(int pageNumber, int take, bool isPaginated)
+    public async Task<ActionResult> GetCities(int pageNumber, int take, bool isPaginated)
     {
-        var cities = await _cityService.GetAllAsync(pageNumber, take, isPaginated);
-        return Ok(cities);
+        var response = await _cityService.GetAllAsync(pageNumber, take, isPaginated);
+        return response.ToActionResult();
     }
 
     // GET: api/Cities/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetCityDTO>> GetCity([FromRoute] Guid id)
+    public async Task<ActionResult> GetCity([FromRoute] Guid id)
     {
-        var city = await _cityService.GetByIdAsync(id);
-        return Ok(city);
+        var response = await _cityService.GetByIdAsync(id);
+        return response.ToActionResult();
     }
 
     // PUT: api/Cities/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<ActionResult<UpdateCityDTO>> UpdateCity(Guid id, UpdateCityDTO updateCityDTO)
+    public async Task<ActionResult> UpdateCity(Guid id, UpdateCityDTO updateCityDTO)
     {
-        var updatedCity = await _cityService.Update(id, updateCityDTO);
-        return Ok(updatedCity);
+        var response = await _cityService.Update(id, updateCityDTO);
+        return response.ToActionResult();
     }
 
     // POST: api/Cities
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<GetCityDTO>> PostCity(AddCityDTO addCityDTO)
+    public async Task<ActionResult> PostCity(AddCityDTO addCityDTO)
     {
-        var addedCity = await _cityService.CreateAsync(addCityDTO);
-        return Ok(addedCity);
+        var response = await _cityService.CreateAsync(addCityDTO);
+        return response.ToActionResult();
     }
 
     // DELETE: api/Cities/5
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCity(Guid id)
     {
-        await _cityService.Delete(id);
-        return Ok();
+        var response = await _cityService.Delete(id);
+        return response.ToActionResult();
     }
 }
