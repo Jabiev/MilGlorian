@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MilGlorian.Persistence.Contexts;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MilGlorian.Persistence.Migrations
 {
     [DbContext(typeof(MilGlorianDbContext))]
-    partial class MilGlorianDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241212190642_AddedSoftDeleteAndAspNets")]
+    partial class AddedSoftDeleteAndAspNets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,6 +246,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -257,6 +261,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -289,6 +294,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -298,6 +304,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -326,6 +333,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -335,6 +343,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -359,12 +368,14 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -392,6 +403,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -414,6 +426,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -451,12 +464,14 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -486,12 +501,14 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -520,12 +537,14 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -559,6 +578,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -583,6 +603,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -625,6 +646,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -640,6 +662,7 @@ namespace MilGlorian.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")

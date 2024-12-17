@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MilGlorian.Domain.Entities;
 using MilGlorian.Domain.Entities.Common;
 
 namespace MilGlorian.Persistence.Contexts;
 
-public class MilGlorianDbContext : DbContext
+public class MilGlorianDbContext : IdentityDbContext
 {
-    public MilGlorianDbContext(DbContextOptions options) : base(options)
+    public MilGlorianDbContext(DbContextOptions<MilGlorianDbContext> options) : base(options)
     {
     }
 
