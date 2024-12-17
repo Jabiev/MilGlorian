@@ -18,97 +18,44 @@ public class CitiesController : ControllerBase
     }
 
     // GET: api/Cities
-    [HttpGet("{pageNumber}/{take}/{isPaginated}")]
-    public async Task<ActionResult<IEnumerable<GetCityDTO>>> GetCities([FromRoute] int pageNumber,
-        [FromRoute] int take,
-        [FromRoute] bool isPaginated)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GetCityDTO>>> GetCities(int pageNumber, int take, bool isPaginated)
     {
-        var cities = new Pagination<GetCityDTO>();
-        try
-        {
-            cities = await _cityService.GetAll(pageNumber, take, isPaginated);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var cities = await _cityService.GetAllAsync(pageNumber, take, isPaginated);
         return Ok(cities);
     }
 
     // GET: api/Cities/5
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<City>> GetCity(Guid id)
-    //{
-    //    var city = await _context.Cities.FindAsync(id);
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetCityDTO>> GetCity([FromRoute] Guid id)
+    {
+        var city = await _cityService.GetByIdAsync(id);
+        return Ok(city);
+    }
 
-    //    if (city == null)
-    //    {
-    //        return NotFound();
-    //    }
+    // PUT: api/Cities/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id}")]
+    public async Task<ActionResult<UpdateCityDTO>> UpdateCity(Guid id, UpdateCityDTO updateCityDTO)
+    {
+        var updatedCity = await _cityService.Update(id, updateCityDTO);
+        return Ok(updatedCity);
+    }
 
-    //    return city;
-    //}
+    // POST: api/Cities
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    public async Task<ActionResult<GetCityDTO>> PostCity(AddCityDTO addCityDTO)
+    {
+        var addedCity = await _cityService.CreateAsync(addCityDTO);
+        return Ok(addedCity);
+    }
 
-    //// PUT: api/Cities/5
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> PutCity(Guid id, City city)
-    //{
-    //    if (id != city.Id)
-    //    {
-    //        return BadRequest();
-    //    }
-
-    //    _context.Entry(city).State = EntityState.Modified;
-
-    //    try
-    //    {
-    //        await _context.SaveChangesAsync();
-    //    }
-    //    catch (DbUpdateConcurrencyException)
-    //    {
-    //        if (!CityExists(id))
-    //        {
-    //            return NotFound();
-    //        }
-    //        else
-    //        {
-    //            throw;
-    //        }
-    //    }
-
-    //    return NoContent();
-    //}
-
-    //// POST: api/Cities
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPost]
-    //public async Task<ActionResult<City>> PostCity(City city)
-    //{
-    //    _context.Cities.Add(city);
-    //    await _context.SaveChangesAsync();
-
-    //    return CreatedAtAction("GetCity", new { id = city.Id }, city);
-    //}
-
-    //// DELETE: api/Cities/5
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> DeleteCity(Guid id)
-    //{
-    //    var city = await _context.Cities.FindAsync(id);
-    //    if (city == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    _context.Cities.Remove(city);
-    //    await _context.SaveChangesAsync();
-
-    //    return NoContent();
-    //}
-
-    //private bool CityExists(Guid id)
-    //{
-    //    return _context.Cities.Any(e => e.Id == id);
-    //}
+    // DELETE: api/Cities/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCity(Guid id)
+    {
+        await _cityService.Delete(id);
+        return Ok();
+    }
 }

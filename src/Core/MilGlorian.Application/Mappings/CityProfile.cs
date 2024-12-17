@@ -6,9 +6,10 @@ namespace MilGlorian.Application.Mappings;
 
 public class CityProfile : Profile
 {
-    protected CityProfile()
+    public CityProfile()
     {
         CreateMap<City,GetCityDTO>().ReverseMap();
-        CreateMap<City,CityDTO>().ReverseMap();
+        CreateMap<City,AddCityDTO>().ReverseMap();
+        CreateMap<City,UpdateCityDTO>().ReverseMap();
     }
 }

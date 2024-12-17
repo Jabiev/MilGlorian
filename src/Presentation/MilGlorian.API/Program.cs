@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MilGlorian.Persistence;
 using MilGlorian.Persistence.Contexts;
@@ -13,7 +14,10 @@ builder.Services.AddDbContext<MilGlorianDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgreSQL"]);
 });
-builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+//builder.Services.AddOptionsWithValidateOnStart<Program>();
 builder.Services.AddSwaggerDocument(configure =>
 {
     configure.PostProcess = (doc =>

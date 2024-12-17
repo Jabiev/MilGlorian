@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
+using MilGlorian.Application.DTOs.City;
 
-namespace MilGlorian.Application.DTOs.City;
+namespace MilGlorian.Application.Validators.City;
 
-public record CityDTO
+public class UpdateCityDTOValidator : AbstractValidator<AddCityDTO>
 {
-    public required string Name { get; set; }
-}
-
-public class CityDTOValidator : AbstractValidator<CityDTO>
-{
-    public CityDTOValidator()
+    public UpdateCityDTOValidator()
     {
         RuleFor(city => city.Name)
             .NotEmpty().WithMessage("City name is required.")
