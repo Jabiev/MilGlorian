@@ -10,6 +10,7 @@ using MilGlorian.Application.Abstract.Repositories.Industries;
 using MilGlorian.Application.Abstract.Repositories.Vacancies;
 using MilGlorian.Application.Abstract.Repositories.VacancyDetails;
 using MilGlorian.Application.Abstract.Services;
+using MilGlorian.Infrastructure.Services.JWT;
 using MilGlorian.Persistence.Concrete.Repositories.Biographies;
 using MilGlorian.Persistence.Concrete.Repositories.Branches;
 using MilGlorian.Persistence.Concrete.Repositories.Categories;
@@ -28,6 +29,7 @@ public static class HostingExtensions
 {
     public static void ConfigurePersistenceServices(this IServiceCollection services)
     {
+        #region Repositories
         services.AddScoped<IBiographyReadRepository,BiographyReadRepository>();
         services.AddScoped<IBiographyWriteRepository,BiographyWriteRepository>();
         services.AddScoped<IBranchReadRepository,BranchReadRepository>();
@@ -48,7 +50,15 @@ public static class HostingExtensions
         services.AddScoped<IVacancyWriteRepository,VacancyWriteRepository>();
         services.AddScoped<IVacancyDetailReadRepository,VacancyDetailReadRepository>();
         services.AddScoped<IVacancyDetailWriteRepository, VacancyDetailWriteRepository>();
+        #endregion
 
+        #region Services
         services.AddScoped<ICityService,CityService>();
+        #endregion
+
+        #region Other
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IJWTService, JWTService>();
+        #endregion
     }
 }

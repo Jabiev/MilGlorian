@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\MilGlorian.Application\MilGlorian.Application.csproj" />
+    <ProjectReference Include="..\MilGlorian.Infrastructure\MilGlorian.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
