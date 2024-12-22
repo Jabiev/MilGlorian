@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MilGlorian.Application.Abstract.Services;
 using MilGlorian.Application.DTOs.City;
-using MilGlorian.Common.Shared;
-using MilGlorian.Domain.Entities;
 
 namespace MilGlorian.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
 public class CitiesController : ControllerBase
 {
     private readonly ICityService _cityService;

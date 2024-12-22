@@ -10,7 +10,6 @@ using MilGlorian.Application.Abstract.Repositories.Industries;
 using MilGlorian.Application.Abstract.Repositories.Vacancies;
 using MilGlorian.Application.Abstract.Repositories.VacancyDetails;
 using MilGlorian.Application.Abstract.Services;
-using MilGlorian.Infrastructure.Services.JWT;
 using MilGlorian.Persistence.Concrete.Repositories.Biographies;
 using MilGlorian.Persistence.Concrete.Repositories.Branches;
 using MilGlorian.Persistence.Concrete.Repositories.Categories;
@@ -54,11 +53,7 @@ public static class HostingExtensions
 
         #region Services
         services.AddScoped<ICityService,CityService>();
-        #endregion
-
-        #region Other
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IJWTService, JWTService>();
         #endregion
     }
 }

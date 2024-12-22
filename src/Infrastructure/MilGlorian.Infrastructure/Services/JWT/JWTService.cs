@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using MilGlorian.Application.Abstract.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MilGlorian.Infrastructure.Services.JWT;
@@ -18,25 +19,27 @@ public class JWTService : IJWTService
 
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {
-        var jwtSettings = _configuration.GetSection("JwtSettings");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecurityKey"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:SecurityKey"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: jwtSettings["Issuer"],
-            audience: jwtSettings["Audience"],
+            issuer: _configuration["JWTSettings:Issuer"],
+            audience: _configuration["JWTSettings:Audience"],
+            notBefore: DateTime.UtcNow,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["AccessTokenExpirationMinutes"])),
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JWTSettings:AccessTokenExpirationMinutes"])),
             signingCredentials: creds
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    // Generate Refresh Token
     public string GenerateRefreshToken()
     {
-        return Guid.NewGuid().ToString().Replace("-", "") + Guid.NewGuid().ToString().Replace("-", "");
+        byte[] bytes = new byte[64];
+        var randomNumber = RandomNumberGenerator.Create();
+        randomNumber.GetBytes(bytes);
+        return Convert.ToBase64String(bytes);
     }
 }
 

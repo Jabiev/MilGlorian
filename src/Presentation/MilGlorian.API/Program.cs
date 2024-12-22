@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MilGlorian.Domain.Entities;
+using MilGlorian.Infrastructure;
 using MilGlorian.Persistence;
 using MilGlorian.Persistence.Contexts;
 using System.Text;
@@ -15,12 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.ConfigurePersistenceServices();
+builder.Services.ConfigureInfrastructureServices();
 
 #region JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
@@ -30,9 +33,10 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]))
+        LifetimeValidator = (_, expire, _, _) => expire > DateTime.UtcNow,
+        ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
+        ValidAudience = builder.Configuration["JWTSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:SecurityKey"]))
     };
 });
 
@@ -47,17 +51,15 @@ builder.Services.AddDbContext<MilGlorianDbContext>(options =>
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<MilGlorianDbContext>();//DON'T FORGET
+    .AddEntityFrameworkStores<MilGlorianDbContext>();
 
 builder.Services.AddScoped<MilGlorianDbContextInitializer>();
 #endregion
 
-
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddOptionsWithValidateOnStart<Program>();//ensure
+//builder.Services.AddOptionsWithValidateOnStart<Program>();
 
-#region Swagger Doc
 builder.Services.AddSwaggerDocument(configure =>
 {
     configure.PostProcess = (doc =>
@@ -73,8 +75,6 @@ builder.Services.AddSwaggerDocument(configure =>
         };
     });
 });
-#endregion
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -101,6 +101,7 @@ app.MapGet("/", handler =>
     return Task.CompletedTask;
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

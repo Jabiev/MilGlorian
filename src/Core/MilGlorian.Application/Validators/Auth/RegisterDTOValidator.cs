@@ -3,9 +3,9 @@ using MilGlorian.Application.DTOs.Auth;
 
 namespace MilGlorian.Application.Validators.Auth;
 
-public class RegisterValidator : AbstractValidator<RegisterDTO>
+public class RegisterDTOValidator : AbstractValidator<RegisterDTO>
 {
-    public RegisterValidator()
+    public RegisterDTOValidator()
     {
         RuleFor(x => x.FullName)
             .NotEmpty().WithMessage("Full Name is required.")

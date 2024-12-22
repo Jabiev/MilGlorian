@@ -46,7 +46,7 @@ public class MilGlorianDbContextInitializer
             UserName = _configuration["SuperAdminSettings:UserName"],
             Email = _configuration["SuperAdminSettings:Email"]
         };
-
+        appUser.IsActive = true;
         await _userManager.CreateAsync(appUser, _configuration["SuperAdminSettings:Password"]);
         await _userManager.AddToRoleAsync(appUser, Role.SuperAdmin.ToString());
     }
