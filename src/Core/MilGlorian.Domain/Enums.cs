@@ -32,3 +32,10 @@ public enum EducationLevel
     Master,
     Doctorate
 }
+
+public enum Role
+{
+    Member,
+    Admin,
+    SuperAdmin
+}

@@ -32,7 +32,7 @@ public class CityService : ICityService
 
         if (createCityDTO is null)
         {
-            response.Message = "the entity mustn't be null";
+            response.Message = "The entity mustn't be null";
             response.ResponseCode = HttpStatusCode.BadRequest;
             return response;
         }
@@ -60,7 +60,7 @@ public class CityService : ICityService
         if (entity is null || entity.isDeleted)
         {
             response.Message = "The entity can't find";
-            response.ResponseCode = HttpStatusCode.BadRequest;
+            response.ResponseCode = HttpStatusCode.NotFound;
             return response;
         }
 
@@ -113,7 +113,7 @@ public class CityService : ICityService
         if (entity is null || entity.isDeleted)
         {
             response.Message = "The entity can't find";
-            response.ResponseCode = HttpStatusCode.BadRequest;
+            response.ResponseCode = HttpStatusCode.NotFound;
             return response;
         }
 
@@ -178,7 +178,7 @@ public class CityService : ICityService
         if (entity is null || entity.isDeleted)
         {
             response.Message = "The entity can't find";
-            response.ResponseCode = HttpStatusCode.BadRequest;
+            response.ResponseCode = HttpStatusCode.NotFound;
             return response;
         }
 

@@ -28,6 +28,7 @@ public static class HostingExtensions
 {
     public static void ConfigurePersistenceServices(this IServiceCollection services)
     {
+        #region Repositories
         services.AddScoped<IBiographyReadRepository,BiographyReadRepository>();
         services.AddScoped<IBiographyWriteRepository,BiographyWriteRepository>();
         services.AddScoped<IBranchReadRepository,BranchReadRepository>();
@@ -48,7 +49,11 @@ public static class HostingExtensions
         services.AddScoped<IVacancyWriteRepository,VacancyWriteRepository>();
         services.AddScoped<IVacancyDetailReadRepository,VacancyDetailReadRepository>();
         services.AddScoped<IVacancyDetailWriteRepository, VacancyDetailWriteRepository>();
+        #endregion
 
+        #region Services
         services.AddScoped<ICityService,CityService>();
+        services.AddScoped<IAuthService, AuthService>();
+        #endregion
     }
 }
