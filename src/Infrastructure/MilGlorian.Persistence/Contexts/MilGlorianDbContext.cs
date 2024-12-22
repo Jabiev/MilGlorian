@@ -5,7 +5,7 @@ using MilGlorian.Domain.Entities.Common;
 
 namespace MilGlorian.Persistence.Contexts;
 
-public class MilGlorianDbContext : IdentityDbContext
+public class MilGlorianDbContext : IdentityDbContext<AppUser>
 {
     public MilGlorianDbContext(DbContextOptions<MilGlorianDbContext> options) : base(options)
     {

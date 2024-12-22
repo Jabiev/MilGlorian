@@ -1,6 +1,6 @@
 ﻿namespace MilGlorian.Application.DTOs.City;
 
-public class UpdateCityDTO
+public record UpdateCityDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
