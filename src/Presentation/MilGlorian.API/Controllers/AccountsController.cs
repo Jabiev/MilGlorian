@@ -15,10 +15,17 @@ public class AccountsController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("[Action]")]
+    [HttpPost("Connect/[Action]")]
     public async Task<ActionResult> Login(SignInDTO signInDTO)
     {
         var response = await _authService.Login(signInDTO);
+        return response.ToActionResult();
+    }
+    
+    [HttpPost("Connect/Token")]
+    public async Task<ActionResult> RefreshToken(string refreshToken)
+    {
+        var response = await _authService.RefreshToken(refreshToken);
         return response.ToActionResult();
     }
     
