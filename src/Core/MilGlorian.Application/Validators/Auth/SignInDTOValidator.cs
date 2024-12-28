@@ -13,7 +13,7 @@ public class SignInDTOValidator : AbstractValidator<SignInDTO>
             .NotNull();
 
         RuleFor(x => x.Password)
-            .MinimumLength(255)
+            .MaximumLength(255)
             .NotEmpty().WithMessage("Password is required.")
             .NotNull();
     }
