@@ -54,6 +54,7 @@ public static class HostingExtensions
         #region Services
         services.AddScoped<ICityService,CityService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IIndustryService, IndustryService>();
         #endregion
     }
 }
