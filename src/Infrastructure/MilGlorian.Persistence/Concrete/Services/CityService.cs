@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using MilGlorian.Application.Abstract.Repositories.Cities;
 using MilGlorian.Application.Abstract.Services;
 using MilGlorian.Application.DTOs.City;
+using MilGlorian.Application.Validators.City;
 using MilGlorian.Common.Shared;
 using MilGlorian.Domain.Entities;
 using MilGlorian.Persistence.Exceptions;
 using System.Net;
+using System.Text;
 
 namespace MilGlorian.Persistence.Concrete.Services;
 
@@ -29,6 +31,20 @@ public class CityService : ICityService
     public async Task<APIResponse<GetCityDTO>> CreateAsync(AddCityDTO createCityDTO)
     {
         var response = new APIResponse<GetCityDTO>();
+
+        AddCityDTOValidator validations = new();
+
+        var result = await validations.ValidateAsync(createCityDTO);
+
+        if (!result.IsValid)
+        {
+            StringBuilder stringBuilder = new();
+            foreach (var error in result.Errors)
+                stringBuilder.AppendLine(error.ErrorMessage);
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            response.Message = stringBuilder.ToString();
+            return response;
+        }
 
         if (createCityDTO is null)
         {
@@ -167,9 +183,23 @@ public class CityService : ICityService
     {
         var response = new APIResponse<UpdateCityDTO>();
 
+        UpdateCityDTOValidator validations = new();
+
+        var result = await validations.ValidateAsync(updateCityDTO);
+
+        if (!result.IsValid)
+        {
+            StringBuilder stringBuilder = new();
+            foreach (var error in result.Errors)
+                stringBuilder.AppendLine(error.ErrorMessage);
+            response.ResponseCode = HttpStatusCode.BadRequest;
+            response.Message = stringBuilder.ToString();
+            return response;
+        }
+
         if (id != updateCityDTO.Id)
         {
-            response.Message = "Id must be similar the id which came from root";
+            response.Message = "Id must be similar the id which came from route";
             response.ResponseCode = HttpStatusCode.BadRequest;
             return response;
         }

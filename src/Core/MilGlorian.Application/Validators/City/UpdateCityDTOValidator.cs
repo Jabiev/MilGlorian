@@ -3,7 +3,7 @@ using MilGlorian.Application.DTOs.City;
 
 namespace MilGlorian.Application.Validators.City;
 
-public class UpdateCityDTOValidator : AbstractValidator<AddCityDTO>
+public class UpdateCityDTOValidator : AbstractValidator<UpdateCityDTO>
 {
     public UpdateCityDTOValidator()
     {
