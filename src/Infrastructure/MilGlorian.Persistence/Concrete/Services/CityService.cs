@@ -182,6 +182,13 @@ public class CityService : ICityService
             return response;
         }
 
+        if((await _readRepository.FirstOrDefaultAsync(c=> c.Name == updateCityDTO.Name)) is not null)
+        {
+            response.Message = "The entity already exists";
+            response.ResponseCode = HttpStatusCode.NotFound;
+            return response;
+        }
+
         entity.Name = updateCityDTO.Name;
         await _writeRepository.SaveChangesAsync();
         
