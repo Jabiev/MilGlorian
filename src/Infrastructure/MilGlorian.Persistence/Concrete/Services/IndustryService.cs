@@ -1,26 +1,25 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MilGlorian.Application.Abstract.Repositories.Cities;
+using MilGlorian.Application.Abstract.Repositories.Industries;
 using MilGlorian.Application.Abstract.Services;
-using MilGlorian.Application.DTOs.City;
-using MilGlorian.Application.Validators.City;
+using MilGlorian.Application.DTOs.Industry;
+using MilGlorian.Application.Validators.Industry;
 using MilGlorian.Common.Shared;
 using MilGlorian.Domain.Entities;
-using MilGlorian.Persistence.Exceptions;
 using System.Net;
 using System.Text;
 
 namespace MilGlorian.Persistence.Concrete.Services;
 
-public class CityService : ICityService
+public class IndustryService : IIndustryService
 {
-    private readonly ICityReadRepository _readRepository;
-    private readonly ICityWriteRepository _writeRepository;
+    private readonly IIndustryReadRepository _readRepository;
+    private readonly IIndustryWriteRepository _writeRepository;
     private readonly IMapper _mapper;
 
-    public CityService(ICityReadRepository readRepository,
-        ICityWriteRepository writeRepository,
+    public IndustryService(IIndustryReadRepository readRepository,
+        IIndustryWriteRepository writeRepository,
         IMapper mapper)
     {
         _readRepository = readRepository;
@@ -28,13 +27,13 @@ public class CityService : ICityService
         _mapper = mapper;
     }
 
-    public async Task<APIResponse<GetCityDTO>> CreateAsync(AddCityDTO createCityDTO)
+    public async Task<APIResponse<GetIndustryDTO>> CreateAsync(AddIndustryDTO createIndustryDTO)
     {
-        var response = new APIResponse<GetCityDTO>();
+        var response = new APIResponse<GetIndustryDTO>();
 
-        AddCityDTOValidator validations = new();
+        AddIndustryDTOValidator validations = new();
 
-        var result = await validations.ValidateAsync(createCityDTO);
+        var result = await validations.ValidateAsync(createIndustryDTO);
 
         if (!result.IsValid)
         {
@@ -46,24 +45,24 @@ public class CityService : ICityService
             return response;
         }
 
-        if (createCityDTO is null)
+        if (createIndustryDTO is null)
         {
             response.Message = "The entity mustn't be null";
             response.ResponseCode = HttpStatusCode.BadRequest;
             return response;
         }
-        if ((await _readRepository.Where(c => c.Name == createCityDTO.Name).FirstOrDefaultAsync()) is not null)
+        if ((await _readRepository.Where(c => c.Name == createIndustryDTO.Name).FirstOrDefaultAsync()) is not null)
         {
             response.Message = "Already Exists";
             response.ResponseCode = HttpStatusCode.BadRequest;
             return response;
         }
 
-        var city = _mapper.Map<City>(createCityDTO);
-        await _writeRepository.AddAsync(city);
+        var industry = _mapper.Map<Industry>(createIndustryDTO);
+        await _writeRepository.AddAsync(industry);
         await _writeRepository.SaveChangesAsync();
 
-        response.Payload = _mapper.Map<GetCityDTO>(city);
+        response.Payload = _mapper.Map<GetIndustryDTO>(industry);
         response.ResponseCode = HttpStatusCode.OK;
         return response;
     }
@@ -80,16 +79,16 @@ public class CityService : ICityService
             return response;
         }
 
-        //depending branches or vacancies
+        //depending companies
         entity.isDeleted = true;
         await _writeRepository.SaveChangesAsync();
         response.ResponseCode = HttpStatusCode.OK;
         return response;
     }
 
-    public async Task<APIResponse<Pagination<GetCityDTO>>> GetAllAsync(int pageNumber = 1, int take = 10, bool isPaginated = false)
+    public async Task<APIResponse<Pagination<GetIndustryDTO>>> GetAllAsync(int pageNumber = 1, int take = 10, bool isPaginated = false)
     {
-        var response = new APIResponse<Pagination<GetCityDTO>>();
+        var response = new APIResponse<Pagination<GetIndustryDTO>>();
 
         if (pageNumber < 1 || take < 1)
         {
@@ -107,9 +106,9 @@ public class CityService : ICityService
                     .Skip((pageNumber - 1) * take)
                     .Take(take);
 
-        var mappedItems = _mapper.Map<List<GetCityDTO>>(query).ToList();
+        var mappedItems = _mapper.Map<List<GetIndustryDTO>>(query).ToList();
 
-        response.Payload = new Pagination<GetCityDTO>()
+        response.Payload = new Pagination<GetIndustryDTO>()
         {
             Items = mappedItems,
             PageIndex = pageNumber,
@@ -121,9 +120,9 @@ public class CityService : ICityService
         return response;
     }
 
-    public async Task<APIResponse<GetCityDTO>> GetByIdAsync(Guid id)
+    public async Task<APIResponse<GetIndustryDTO>> GetByIdAsync(Guid id)
     {
-        var response = new APIResponse<GetCityDTO>();
+        var response = new APIResponse<GetIndustryDTO>();
 
         var entity = await _readRepository.GetByIdAsync(id);
         if (entity is null || entity.isDeleted)
@@ -133,14 +132,14 @@ public class CityService : ICityService
             return response;
         }
 
-        response.Payload = _mapper.Map<GetCityDTO>(entity);
+        response.Payload = _mapper.Map<GetIndustryDTO>(entity);
         response.ResponseCode = HttpStatusCode.OK;
         return response;
     }
 
-    public async Task<APIResponse<Pagination<GetCityDTO>>> SearchAsync(string name, int pageNumber = 1, int take = 10, bool isPaginated = false)
+    public async Task<APIResponse<Pagination<GetIndustryDTO>>> SearchAsync(string name, int pageNumber = 1, int take = 10, bool isPaginated = false)
     {
-        var response = new APIResponse<Pagination<GetCityDTO>>();
+        var response = new APIResponse<Pagination<GetIndustryDTO>>();
 
         if (string.IsNullOrEmpty(name))
         {
@@ -165,9 +164,9 @@ public class CityService : ICityService
                     .Skip((pageNumber - 1) * take)
                     .Take(take);
 
-        var mappedItems = _mapper.Map<List<GetCityDTO>>(query).ToList();
+        var mappedItems = _mapper.Map<List<GetIndustryDTO>>(query).ToList();
 
-        response.Payload = new Pagination<GetCityDTO>()
+        response.Payload = new Pagination<GetIndustryDTO>()
         {
             Items = mappedItems,
             PageIndex = pageNumber,
@@ -179,13 +178,13 @@ public class CityService : ICityService
         return response;
     }
 
-    public async Task<APIResponse<UpdateCityDTO>> Update(Guid id, UpdateCityDTO updateCityDTO)
+    public async Task<APIResponse<UpdateIndustryDTO>> Update(Guid id, UpdateIndustryDTO updateIndustryDTO)
     {
-        var response = new APIResponse<UpdateCityDTO>();
+        var response = new APIResponse<UpdateIndustryDTO>();
 
-        UpdateCityDTOValidator validations = new();
+        UpdateIndustryDTOValidator validations = new();
 
-        var result = await validations.ValidateAsync(updateCityDTO);
+        var result = await validations.ValidateAsync(updateIndustryDTO);
 
         if (!result.IsValid)
         {
@@ -197,7 +196,7 @@ public class CityService : ICityService
             return response;
         }
 
-        if (id != updateCityDTO.Id)
+        if (id != updateIndustryDTO.Id)
         {
             response.Message = "Id must be similar the id which came from route";
             response.ResponseCode = HttpStatusCode.BadRequest;
@@ -212,17 +211,17 @@ public class CityService : ICityService
             return response;
         }
 
-        if((await _readRepository.FirstOrDefaultAsync(c=> c.Name == updateCityDTO.Name)) is not null)
+        if ((await _readRepository.FirstOrDefaultAsync(c => c.Name == updateIndustryDTO.Name)) is not null)
         {
             response.Message = "The entity already exists";
             response.ResponseCode = HttpStatusCode.NotFound;
             return response;
         }
 
-        entity.Name = updateCityDTO.Name;
+        entity.Name = updateIndustryDTO.Name;
         await _writeRepository.SaveChangesAsync();
-        
-        response.Payload = _mapper.Map<UpdateCityDTO>(entity);
+
+        response.Payload = _mapper.Map<UpdateIndustryDTO>(entity);
         response.ResponseCode = HttpStatusCode.OK;
 
         return response;
